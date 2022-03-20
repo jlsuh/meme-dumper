@@ -9,13 +9,12 @@ class Dumper:
     def __filter_public_usernames(self):
         public_usernames = []
         for username in self.target_usernames:
-            profile_type = "public"
+            profile_type = "private"
             profile = instaloader.Profile.from_username(
                 self.loader.context, username)
             if not profile.is_private:
                 public_usernames.append(username)
-            else:
-                profile_type = "private"
+                profile_type = "public"
             print(f"{username} is {profile_type}")
         return public_usernames
 
