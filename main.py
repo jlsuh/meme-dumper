@@ -5,6 +5,10 @@ from defines.creds import get_creds
 from dumper import Dumper
 
 
+def map_profiles(target_usernames, loader):
+    return map(lambda username: instaloader.Profile.from_username(loader.context, username), target_usernames)
+
+
 def main():
     CREDS = get_creds()
     IL = instaloader.Instaloader()
@@ -14,7 +18,8 @@ def main():
     except ConnectionException as e:
         sys.exit(f"Session import failed: {str(e)}")
 
-    dumper = Dumper(CREDS.get("target_usernames"), IL)
+    target_profiles = map_profiles(CREDS.get("target_usernames"), IL)
+    dumper = Dumper(target_profiles, IL)
     dumper.init_dump()
     IL.save_session_to_file(CREDS.get("session_file_path"))
 
